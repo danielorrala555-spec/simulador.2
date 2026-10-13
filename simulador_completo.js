@@ -18,7 +18,7 @@ function ocultarSeccion() {
   document.getElementById("tablaClientes").classList.remove("activa")
 
 }
-
+// ---------------------------[[[ validacion agregar tasa ]]]-----------------------//
 function validacion(numero, maximo, minimo, idError){
   let mensaje = "";
   if(!Number.isFinite(numero)){
@@ -36,13 +36,54 @@ function mostrarSeccion(idSeccion){
 }
 
 function guardarTasa(){
-  let nuevaTasa = recuperaraTexto("tasaInteres");π
+  let nuevaTasa = recuperarInt("tasaInteres");
   let mensaje =validacion(nuevaTasa, 20, 10, "mensajeTasa");
-    if (!mensaje == ""){
+    if (mensaje !== ""){
       return
     }
       tasaInteres = nuevaTasa;
-      document.getElementById("mensajeTasa").textContent="tasa guardada correctamente"
-   
-    
+      document.getElementById("mensajeTasa").textContent="tasa configurada correctamente"
 }
+//***********-------------------------------------------------*********** *//
+
+
+//-------------------------[[[ agregarCliente ]]]------------------------//
+
+function guardarCliente(){
+  let tablaCliente = document.getElementById("tablaClientes")
+  let nuevaCedula = recuperarTexto("txtCedula");
+  let nuevoNombre = recuperarTexto("txtNombre");
+  let nuevoApellido = recuperarTexto("txtApellido");
+  let nuevoIngreso = recuperarInt("txtIngresos");
+  let nuevoEgreso = recuperarInt("txtEgresos");
+  let nuevoCliente = {}
+  nuevoCliente.cedula = nuevaCedula;
+  nuevoCliente.nombre = nuevoNombre;
+  nuevoCliente.apellido = nuevoApellido;
+  nuevoCliente.ingresos = nuevoIngreso
+  nuevoCliente.egresos = nuevoEgreso
+  
+  agregarCliente(nuevoCliente);
+  pintarCliente(clientes, tablaCliente) 
+}
+
+function agregarCliente(nvCliente){
+  clientes.push(nvCliente)
+}
+
+function pintarCliente( array, idTabla, ){
+    let contenido = "";
+    for (let i = 0; i < array.length; i++) {
+         contenido += "<tr><td>"+array[i].cedula+"</td>"+
+                      "<td>"+array[i].nombre+"</td>"+
+                      "<td>"+array[i].apellido+"</td>"+
+                      "<td>"+array[i].ingresos+"</td>"+
+                      "<td>"+array[i].egresos+"</td>"+
+                      "<td>"+
+                      "<button>Actualizar</button>"+
+                      "<button>Eliminar</button>"+
+                      "</td></tr>"
+        }
+        idTabla.innerHTML = contenido;
+}
+//***********---------------------------------------------*********** *//
