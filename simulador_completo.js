@@ -71,7 +71,7 @@ function agregarCliente(nvCliente){
   clientes.push(nvCliente)
 }
 
-function pintarCliente( array, idTabla, ){
+function pintarCliente(array, idTabla){
     let contenido = "";
     for (let i = 0; i < array.length; i++) {
          contenido += "<tr><td>"+array[i].cedula+"</td>"+
@@ -87,3 +87,26 @@ function pintarCliente( array, idTabla, ){
         idTabla.innerHTML = contenido;
 }
 //***********---------------------------------------------*********** *//
+
+function buscarCliente(cedula) {
+    const cliente = clientes.find(usuario => usuario.cedula === cedula);
+            return cliente;
+}
+
+function seleccionarCliente(){
+  let numeroCdl = recuperarTexto("txtBuscar");
+        clienteSeleccionado = buscarCliente(numeroCdl);
+        if (clienteSeleccionado) {
+          mostrarTextoEnCaja("txtNombre", clienteSeleccionado.nombre);
+          mostrarTextoEnCaja("txtApellido", clienteSeleccionado.apellido);  
+          mostrarTextoEnCaja("txtCedula", clienteSeleccionado.cedula);  
+          mostrarTextoEnCaja("txtIngresos", clienteSeleccionado.ingresos);
+          mostrarTextoEnCaja("txtEgresos", clienteSeleccionado.egresos);
+          mostrarCliente(clienteSeleccionado);
+        }else{
+          alert("El cliente con la cédula " + numeroCdl + " no existe");
+        }
+        
+    
+
+}
