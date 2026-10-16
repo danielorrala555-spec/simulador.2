@@ -26,9 +26,9 @@ function mostrarSeccion(idSeccion){
 function validacion(numero, maximo, minimo, idError){
   let mensaje = "";
   if(!Number.isFinite(numero)){
-        mensaje = "Ingresa una tasa válida";
+        mensaje = "Ingresa una tasa válida  🚫";
     }else if( numero < minimo || numero >maximo){
-        mensaje = `la tasa deve ser enre ${minimo} y ${maximo}`;
+        mensaje = `la tasa deve ser enre ${minimo} y ${maximo} 🚫`;
   }
   document.getElementById(idError).textContent = mensaje;
   return mensaje;
@@ -41,7 +41,7 @@ function guardarTasa(){
       return
     }
       tasaInteres = nuevaTasa;
-      document.getElementById("mensajeTasa").textContent="tasa configurada correctamente"
+      document.getElementById("mensajeTasa").textContent="tasa configurada correctamente ✅"
 }
 //***********-------------------------------------------------*********** *//
 
@@ -135,4 +135,25 @@ function limpiar(){
   mostrarTextoEnCaja("txtIngresos", mensaje);
   mostrarTextoEnCaja("txtEgresos", mensaje);
 
+}
+
+//-------------------------------------[[[[[ buscar cliente y mostar datos en pantalla  ]]]]]------------------------------//
+function buscarClienteCredito(){
+let clienteCredito = recuperarTexto("buscarCedulaCredito")
+let tablaCliente = document.getElementById("datosClienteCredito")
+let cliente = buscarCliente(clienteCredito)
+if(cliente){
+  pintarClienteCredito(cliente, tablaCliente)
+  }else{
+    tablaCliente.innerHTML= "cliente no encontrado  ❌"
+  }
+}
+function pintarClienteCredito(cliente, idInformacion){
+  let infoCliente = "<h3>Datos del Cliente</h3>"+
+    "<p><strong>Cédula:</strong>"+cliente.cedula+"</p>"+
+    "<p><strong>Nombre:</strong>"+cliente.nombre+"</p>"+
+    "<p><strong>Apellido:</strong>"+cliente.apellido+"</p>"+
+    "<p><strong>Ingresos:</strong>"+cliente.ingresos+"</p>"+
+    "<p><strong>Egresos:</strong>"+cliente.egresos+"</p>";
+  idInformacion.innerHTML = infoCliente
 }
