@@ -57,14 +57,36 @@ function guardarCliente(){
   let nuevoIngreso = recuperarInt("txtIngresos");
   let nuevoEgreso = recuperarInt("txtEgresos");
   let nuevoCliente = {}
+  let validarCliente;
   nuevoCliente.cedula = nuevaCedula;
   nuevoCliente.nombre = nuevoNombre;
   nuevoCliente.apellido = nuevoApellido;
   nuevoCliente.ingresos = nuevoIngreso
   nuevoCliente.egresos = nuevoEgreso
-  
-  agregarCliente(nuevoCliente);
-  pintarCliente(clientes, tablaCliente) 
+  //llama a modificarCcliente, si no existe ño agrega caso contrario lo crea//
+  validarCliente = modificarCliente(nuevoCliente)
+  if(validarCliente){
+    pintarCliente(clientes, tablaCliente);
+  }else{
+    agregarCliente(nuevoCliente);
+  pintarCliente(clientes, tablaCliente)
+  }
+    
+}
+
+function modificarCliente(datosAdd) {
+    let cliente = buscarCliente(datosAdd.cedula);
+
+    if (cliente) {
+        cliente.nombre = datosAdd.nombre;
+        cliente.apellido = datosAdd.apellido;
+        cliente.ingresos = datosAdd.ingresos;
+        cliente.egresos = datosAdd.egresos; 
+        return cliente;
+    }else{
+      return cliente;
+    }
+
 }
 
 function agregarCliente(nvCliente){
@@ -80,7 +102,7 @@ function pintarCliente(array, idTabla){
                       "<td>"+array[i].ingresos+"</td>"+
                       "<td>"+array[i].egresos+"</td>"+
                       "<td>"+
-                      "<button>Actualizar</button>"+
+                      "<button onclick='seleccionarCliente("+JSON.stringify(array[i].cedula)+")'>Actualizar</button>"+
                       "<button>Eliminar</button>"+
                       "</td></tr>"
         }
@@ -92,21 +114,26 @@ function buscarCliente(cedula) {
     const cliente = clientes.find(usuario => usuario.cedula === cedula);
             return cliente;
 }
-
-function seleccionarCliente(){
-  let numeroCdl = recuperarTexto("txtBuscar");
-        clienteSeleccionado = buscarCliente(numeroCdl);
+//si el cliente existe su info se mostrara en los imputs de texto, caso contrario se mostrara el mensaje//
+function seleccionarCliente(cedula){
+        clienteSeleccionado = buscarCliente(cedula);
         if (clienteSeleccionado) {
           mostrarTextoEnCaja("txtNombre", clienteSeleccionado.nombre);
           mostrarTextoEnCaja("txtApellido", clienteSeleccionado.apellido);  
           mostrarTextoEnCaja("txtCedula", clienteSeleccionado.cedula);  
           mostrarTextoEnCaja("txtIngresos", clienteSeleccionado.ingresos);
           mostrarTextoEnCaja("txtEgresos", clienteSeleccionado.egresos);
-          mostrarCliente(clienteSeleccionado);
         }else{
-          alert("El cliente con la cédula " + numeroCdl + " no existe");
+          alert("El cliente con la cédula " + cedula + " no existe");
         }
-        
-    
+}
+
+function limpiar(){
+  let mensaje=""
+  mostrarTextoEnCaja("txtNombre", mensaje);
+  mostrarTextoEnCaja("txtApellido", mensaje);  
+  mostrarTextoEnCaja("txtCedula", mensaje);  
+  mostrarTextoEnCaja("txtIngresos", mensaje);
+  mostrarTextoEnCaja("txtEgresos", mensaje);
 
 }
