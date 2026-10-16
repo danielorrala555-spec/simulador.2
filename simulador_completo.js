@@ -15,8 +15,12 @@ function ocultarSeccion() {
   document.getElementById("parametros").classList.remove("activa");
   document.getElementById("mensajeTasa").classList.remove("activa");
   document.getElementById("clientes").classList.remove("activa");
-  document.getElementById("tablaClientes").classList.remove("activa")
+  document.getElementById("credito").classList.remove("activa")
 
+}
+function mostrarSeccion(idSeccion){
+  ocultarSeccion("parametros");
+  document.getElementById(idSeccion).classList.add("activa");
 }
 // ---------------------------[[[ validacion agregar tasa ]]]-----------------------//
 function validacion(numero, maximo, minimo, idError){
@@ -28,11 +32,6 @@ function validacion(numero, maximo, minimo, idError){
   }
   document.getElementById(idError).textContent = mensaje;
   return mensaje;
-}
-
-function mostrarSeccion(idSeccion){
-  ocultarSeccion("parametros");
-  document.getElementById(idSeccion).classList.add("activa");
 }
 
 function guardarTasa(){
