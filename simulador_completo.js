@@ -188,8 +188,12 @@ function calcularCredito(){
     if (cliente === null) {
         resultadoCredito.textContent = "cliente no existe ❌";
         return;
-    }
-
+        }
+    if(!Number.isFinite(txtmonto) || !Number.isFinite(txtPlazo) || txtmonto <= 0 || txtPlazo <= 0) {
+    resultadoCredito.className = "rechazado";
+    resultadoCredito.textContent ="El monto y el plazo deben ser mayores que cero.";
+    return;
+  }
 
     // CÁLCULOS
 
@@ -238,9 +242,11 @@ function calcularCredito(){
     let mensajeCredito;
 
     if (creditoAprovado === true) {
-        mensajeCredito = " APROBADO ✅";
+        mensajeCredito = " CREDITO APROBADO";
+    resultadoCredito.className = "aprobado";
     } else {
-        mensajeCredito = " RECHAZADO ❌";
+        mensajeCredito = " CREDITO RECHAZADO";
+    resultadoCredito.className = "rechazado";
     }
 
 let mensaje = "Capacidad de pago: "+capacidadPago +"<br>"+
@@ -251,6 +257,5 @@ let mensaje = "Capacidad de pago: "+capacidadPago +"<br>"+
 
     // MOSTRAR RESULTADOS
 resultadoCredito.innerHTML = mensaje
-
 
 }
