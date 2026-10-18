@@ -41,7 +41,7 @@ function guardarTasa(){
       return
     }
       tasaInteres = nuevaTasa;
-      document.getElementById("mensajeTasa").textContent="tasa configurada correctamente "+nuevaTasa+"✅"
+      document.getElementById("mensajeTasa").textContent="tasa configurada correctamente "+tasaInteres+"✅"
 }
 //***********-------------------------------------------------*********** *//
 
@@ -121,7 +121,6 @@ function pintarClientes(array, idTabla){
                       "<td>"+array[i].egresos+"</td>"+
                       "<td>"+
                       "<button onclick='seleccionarCliente("+JSON.stringify(array[i].cedula)+")'>Actualizar</button>"+
-                      "<button>Eliminar</button>"+
                       "</td></tr>"
         }
         idTabla.innerHTML = contenido;
@@ -175,4 +174,83 @@ function pintarClienteCredito(cliente, idInformacion){
     "<p><strong>Ingresos:</strong>"+cliente.ingresos+"</p>"+
     "<p><strong>Egresos:</strong>"+cliente.egresos+"</p>";
   idInformacion.innerHTML = infoCliente
+}
+
+function calcularCredito(){
+  let resultadoCredito = document.getElementById("resultadoCredito")
+  let clienteCredito = recuperarTexto("buscarCedulaCredito")
+  let cliente = buscarCliente(clienteCredito)
+      // RECUPERAR VALORES
+
+    let txtTazaInteres = recuperarFloat("tasaInteres");
+    let txtmonto = recuperarInt("montoCredito");
+    let txtPlazo = recuperarInt("plazoCredito");
+    if (cliente === null) {
+        resultadoCredito.textContent = "cliente no existe ❌";
+        return;
+    }
+
+
+    // CÁLCULOS
+
+    let disponible =
+        calcularDisponible(cliente.ingresos, cliente.egresos);
+
+    let capacidadPago =
+        calcularCapacidadDePgo(disponible);
+
+    let interes =
+        calcularInteresSimple(
+            txtmonto,
+            txtPlazo,
+            txtTazaInteres
+        );
+
+    let total =
+        calcularTotalPagar(
+            txtmonto,
+            interes
+        );
+
+    let cuotaMensual =
+        calcularCuotaMensual(
+            total,
+            txtPlazo
+        );
+
+
+    // EVITAR VALORES NEGATIVOS
+
+    if (disponible < 0 && capacidadPago < 0) {
+        disponible = 0;
+        capacidadPago = 0;
+    }
+
+
+    // APROBAR O RECHAZAR CRÉDITO
+
+    let creditoAprovado =
+        aprobarCredito(
+            capacidadPago,
+            cuotaMensual
+        );
+
+    let mensajeCredito;
+
+    if (creditoAprovado === true) {
+        mensajeCredito = " APROBADO ✅";
+    } else {
+        mensajeCredito = " RECHAZADO ❌";
+    }
+
+let mensaje = "Capacidad de pago: "+capacidadPago +"<br>"+
+"Total a pagar: " +total +" <br>"+
+"Cuota mensual: " +cuotaMensual.toFixed(2)+"<br>"+
+"RESULTADO: " +mensajeCredito+"<br>"
+
+
+    // MOSTRAR RESULTADOS
+resultadoCredito.innerHTML = mensaje
+
+
 }

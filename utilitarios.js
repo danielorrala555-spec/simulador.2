@@ -43,3 +43,8 @@ function recuperarTexto(idComponente){
 
     return true;
 }
+
+function mostarEnEspam(idComponente, valor){
+    let componente = document.getElementById(idComponente);
+     componente.textContent = valor;
+}
