@@ -11,37 +11,37 @@
   
 //Para recuperar o mostrar información usar los métodos de la clase utilitarios, puede agregar métodos adicionales en utilitarios
 
-function ocultarSeccion() {
-  document.getElementById("parametros").classList.remove("activa");
-  document.getElementById("mensajeTasa").classList.remove("activa");
-  document.getElementById("clientes").classList.remove("activa");
-  document.getElementById("credito").classList.remove("activa")
+function ocultarSecciones() {
+    let secciones = document.querySelectorAll("section");
 
+    secciones.forEach(seccion => {
+        seccion.classList.remove("activa");
+    });
 }
 function mostrarSeccion(idSeccion){
-  ocultarSeccion("parametros");
+  ocultarSecciones();
   document.getElementById(idSeccion).classList.add("activa");
 }
 // ---------------------------[[[ validacion agregar tasa ]]]-----------------------//
-function validacion(numero, maximo, minimo, idError){
+function validacionTasa(numero, maximo, minimo, idError){
   let mensaje = "";
   if(!Number.isFinite(numero)){
         mensaje = "Ingresa una tasa válida  🚫";
     }else if( numero < minimo || numero >maximo){
-        mensaje = `la tasa deve ser enre ${minimo} y ${maximo} 🚫`;
+        mensaje = `la tasa debe ser entre ${minimo} y ${maximo} 🚫`;
   }
   document.getElementById(idError).textContent = mensaje;
   return mensaje;
 }
 
 function guardarTasa(){
-  let nuevaTasa = recuperarInt("tasaInteres");
-  let mensaje =validacion(nuevaTasa, 20, 10, "mensajeTasa");
+  let nuevaTasa = recuperarFloat("tasaInteres");
+  let mensaje =validacionTasa(nuevaTasa, 20, 10, "mensajeTasa");
     if (mensaje !== ""){
       return
     }
       tasaInteres = nuevaTasa;
-      document.getElementById("mensajeTasa").textContent="tasa configurada correctamente ✅"
+      document.getElementById("mensajeTasa").textContent="tasa configurada correctamente "+nuevaTasa+"✅"
 }
 //***********-------------------------------------------------*********** *//
 
@@ -62,17 +62,36 @@ function guardarCliente(){
   nuevoCliente.apellido = nuevoApellido;
   nuevoCliente.ingresos = nuevoIngreso
   nuevoCliente.egresos = nuevoEgreso
+  let nombre =validacion("txtNombre");
+  let apellido =validacion("txtApellido");
+  let cedula =validacion("txtCedula");
+  let ingresos =validacion("txtIngresos", );
+  let egresos =validacion("txtEgresos");
+  let mensaje=""
+  if(
+    cedula === false || nombre === false || apellido === false || ingresos === false || egresos === false){
+      return alert(mensaje="datos incompletos. no se puede guardar el cliente")
+    }
+
+
   //llama a modificarCcliente, si no existe ño agrega caso contrario lo crea//
   validarCliente = modificarCliente(nuevoCliente)
   if(validarCliente){
-    pintarCliente(clientes, tablaCliente);
+    pintarClientes(clientes, tablaCliente);
   }else{
     agregarCliente(nuevoCliente);
-  pintarCliente(clientes, tablaCliente)
+  pintarClientes(clientes, tablaCliente)
   }
     
 }
 
+function validacion(campo, idMensaje){
+  let valor = recuperarTexto(campo);
+  if(valor.trim() === ""){
+    return false
+  }
+  return true
+}
 function modificarCliente(datosAdd) {
     let cliente = buscarCliente(datosAdd.cedula);
 
@@ -92,7 +111,7 @@ function agregarCliente(nvCliente){
   clientes.push(nvCliente)
 }
 
-function pintarCliente(array, idTabla){
+function pintarClientes(array, idTabla){
     let contenido = "";
     for (let i = 0; i < array.length; i++) {
          contenido += "<tr><td>"+array[i].cedula+"</td>"+
@@ -110,7 +129,7 @@ function pintarCliente(array, idTabla){
 //***********---------------------------------------------*********** *//
 
 function buscarCliente(cedula) {
-    const cliente = clientes.find(usuario => usuario.cedula === cedula);
+    const cliente = clientes.find(usuario => usuario.cedula === cedula) ?? null; // HORA RETORNA NULL SIN AFECTAR A LOS IF DE LAS DEMAS FUNCIONES //
             return cliente;
 }
 //si el cliente existe su info se mostrara en los imputs de texto, caso contrario se mostrara el mensaje//

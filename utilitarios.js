@@ -33,3 +33,13 @@ function recuperarTexto(idComponente){
         componente.src = rutaImagen;
     
     }
+
+    function validarCampos(...campos) {
+    for (let campo of campos) {
+        if (campo.trim() === "") {
+            return false;
+        }
+    }
+
+    return true;
+}
