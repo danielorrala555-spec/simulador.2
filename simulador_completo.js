@@ -211,15 +211,15 @@ function calcularCredito(){
             txtTazaInteres
         );
 
-    let total =
+    montoCalculado =
         calcularTotalPagar(
             txtmonto,
             interes
         );
 
-    let cuotaMensual =
+    cuotaCalculada =
         calcularCuotaMensual(
-            total,
+            montoCalculado,
             txtPlazo
         );
 
@@ -234,10 +234,10 @@ function calcularCredito(){
 
     // APROBAR O RECHAZAR CRÉDITO
 
-    let creditoAprobado =
+    creditoAprobado =
         aprobarCredito(
             capacidadPago,
-            cuotaMensual
+            cuotaCalculada
         );
 
     let mensajeCredito;
@@ -253,10 +253,64 @@ function calcularCredito(){
     }
 
 let mensaje = "Capacidad de pago: "+capacidadPago +"<br>"+
-"Total a pagar: " +total +" <br>"+
-"Cuota mensual: " +cuotaMensual.toFixed(2)+"<br>"+
+"Total a pagar: " +montoCalculado +" <br>"+
+"Cuota mensual: " +cuotaCalculada.toFixed(2)+"<br>"+
 "RESULTADO: " +mensajeCredito+"<br>"
     // MOSTRAR RESULTADOS
 resultadoCredito.innerHTML = mensaje
 
+}
+
+function solicitarCredito(){
+  let plazoTotal = recuperarInt("plazoCredito")
+  plazoCalculado = plazoTotal*12;
+  let cedulas = recuperarTexto("buscarCedulaCredito");
+  let clienteSeleccionado = buscarCliente(cedulas)
+  if (creditoAprobado === true){
+    let credito = {
+    cedula: clienteSeleccionado.cedula,
+    nombre: clienteSeleccionado.nombre,
+    apellido: clienteSeleccionado.apellido,
+    monto: montoCalculado,
+    tasa: tasaInteres,
+    plazo: plazoCalculado,
+    cuota: cuotaCalculada
+    };
+    creditos.push(credito)
+    alert("✅ Crédito asignado correctamente");
+  }
+}
+
+function buscarCreditos(cedula){
+  let datosCreditoCliente = [];
+    for (let i = 0 ;i<creditos.length;i++){
+        if (cedula == creditos[i].cedula){
+        datosCreditoCliente.push(creditos[i])
+        } 
+    }
+    return datosCreditoCliente
+}
+
+function pintarCreditos (creditos){
+  let tabla = document.getElementById("tablaCreditos");
+  let elementosTabla = "";
+  for (let i = 0 ; i< creditos.length;i++){
+      let datosCreditos = creditos[i]
+      elementosTabla += "<tr><td>"+datosCreditos.cedula+"</td>"+
+      "<td>"+datosCreditos.nombre+"</td>"+
+      "<td>"+datosCreditos.apellido+"</td>"+
+      "<td>"+datosCreditos.monto.toFixed(2)+"</td>"+
+      "<td>"+datosCreditos.tasa+" %"+"</td>"+
+      "<td>"+datosCreditos.plazo+" meses</td>"+
+      "<td>"+datosCreditos.cuota.toFixed(2)+"</td></tr>"
+      
+  }
+  tabla.innerHTML = elementosTabla;
+
+}
+
+function buscarCreditosCliente(){
+  let cedula = recuperarTexto("buscarCedulaListado")
+  let datos =buscarCreditos(cedula)
+  pintarCreditos (datos)
 }
