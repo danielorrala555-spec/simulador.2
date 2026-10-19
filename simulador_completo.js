@@ -8,6 +8,7 @@
   let montoCalculado = 0;
   let plazoCalculado = 0;
   let creditoAprobado = false;
+  let estadoBoton = document.getElementById("btnSolicitarCredito");
   
 //Para recuperar o mostrar información usar los métodos de la clase utilitarios, puede agregar métodos adicionales en utilitarios
 
@@ -233,7 +234,7 @@ function calcularCredito(){
 
     // APROBAR O RECHAZAR CRÉDITO
 
-    let creditoAprovado =
+    let creditoAprobado =
         aprobarCredito(
             capacidadPago,
             cuotaMensual
@@ -241,20 +242,20 @@ function calcularCredito(){
 
     let mensajeCredito;
 
-    if (creditoAprovado === true) {
-        mensajeCredito = " CREDITO APROBADO";
+    if (creditoAprobado === true) {
+        mensajeCredito = " CREDITO APROBADO ✅";
     resultadoCredito.className = "aprobado";
+    estadoBoton.disabled = false
     } else {
-        mensajeCredito = " CREDITO RECHAZADO";
+        mensajeCredito = " CREDITO RECHAZADO ❌";
     resultadoCredito.className = "rechazado";
+    estadoBoton.disabled = true
     }
 
 let mensaje = "Capacidad de pago: "+capacidadPago +"<br>"+
 "Total a pagar: " +total +" <br>"+
 "Cuota mensual: " +cuotaMensual.toFixed(2)+"<br>"+
 "RESULTADO: " +mensajeCredito+"<br>"
-
-
     // MOSTRAR RESULTADOS
 resultadoCredito.innerHTML = mensaje
 
